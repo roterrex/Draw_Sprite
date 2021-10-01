@@ -4,3 +4,5 @@ Main and MenuItem created originaly by Matthew Roberts, Damian Jurd, and Dominic
 tutorial avalible in wiki section of github
 
 if you wish to improve on the code email me here joel.perry@students.mq.edu.au with a proposal to be added as a contributor
+
+if you find a bug please report it within the github repo issues section
