@@ -48,10 +48,16 @@ public class PrintResult {
       file.write(System.lineSeparator());
       file.write("  //Printing it is then similar to the stock code except polygons must be fetched with"); 
       file.write(System.lineSeparator());
-      file.write(" .getLeft() fill color with .getMiddle() and line color with .getRight()");
+      file.write("  //.getLeft() fill color with .getMiddle() and line color with .getRight()");
       file.write(System.lineSeparator());
       file.write("  //The app can only create black lines at present but you can edit the created code to ");
-      file.write("get colored lines"+System.lineSeparator());
+      file.write("get colored lines"+System.lineSeparator()+System.lineSeparator());
+
+      file.write("  //Citation do not remove"+System.lineSeparator());
+      file.write("  //Created by Draw_Sprite app, free for use with credit"+System.lineSeparator());
+      file.write("  //https://github.com/roterrex/Draw_Sprite/tree/master/src"+System.lineSeparator());
+      file.write(System.lineSeparator());
+
       file.write("  List<Trio<Polygon, Color, Color>> sprite = new ArrayList<Trio<Polygon,Color,");
       file.write("Color>>();"+System.lineSeparator());
       file.write("  Point locXY = new Point(loc.x + 0, loc.y + 0); // change the 0's to adjust ");
@@ -102,7 +108,6 @@ public class PrintResult {
 
   private void printColors(List<SpritePolygon> polygons){
     List<Color> cols = getColorList(polygons);
-    System.out.println(cols.size());
     int i = 1;   
     try {
       for(Color col : cols){
@@ -140,7 +145,6 @@ public class PrintResult {
     List<Color> colList = new ArrayList<Color>();
     colList.add(polygons.get(0).poly.getRight());
     for(SpritePolygon poly : polygons){
-      System.out.println("a");
 
       for(Color c : colList){
         if(equalsCol(c, poly.poly.getMiddle())){
