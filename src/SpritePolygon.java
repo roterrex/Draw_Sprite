@@ -46,13 +46,18 @@ public class SpritePolygon{
   }
 
   public void addPolyPnt(Point NodeNum){
-    poly.getLeft().addPoint(NodeNum.x*Grid.getGrid().lineSpaceX,
-        NodeNum.y*Grid.getGrid().lineSpaceY);
+    poly.getLeft().addPoint(Grid.getGrid().nodeNumToGridPos(NodeNum.x, true),
+        Grid.getGrid().nodeNumToGridPos(NodeNum.y, false));
   }
 
   public void removeNode(Node nr){
-    poly.getLeft().reset();
     nodes.remove(nr);
+
+    redrawNodes();
+  }
+
+  public void redrawNodes(){
+    poly.getLeft().reset();
 
     for(Node n : nodes){
       addPolyPnt(n.lineNum);

@@ -22,7 +22,7 @@ public class Window {
   List<MenuItem> Buttons;
   SetUtil stngs;
 
-  Point TmpGridLineNum;
+  int TmpGridLineNum;
 
   Color fillCol = Color.white;
   Color lineColor = Color.black;
@@ -42,7 +42,10 @@ public class Window {
     Buttons = createButtons();
   }
 
-  public void mouseClicked(MouseEvent e){  
+  public void mouseClicked(MouseEvent e, Color c, int gridNum){ 
+    currentEntry = c;
+    TmpGridLineNum = gridNum;
+
     Buttons = createButtons(); 
     Point mousePos = new Point(e.getX(), e.getY());   
     if(mousePos.x > stngs.GRID_SIZE.x){
@@ -57,6 +60,15 @@ public class Window {
         }
       } else if (!curPoly.isPresent()){
         newPoly();
+      }
+    }
+  }
+
+  private void buttonClicked(Point mousePos){
+    for (MenuItem b : Buttons) {
+      if (b.contains(mousePos.x, mousePos.y)) {
+        b.action.run();
+        return;
       }
     }
   }
@@ -111,8 +123,15 @@ public class Window {
         curPoly = Optional.of(polygons.get(i-1));
       }
     }
-
   }
+
+  void changeGridSize(){
+    grid.setSize(TmpGridLineNum);
+    for(SpritePolygon p : polygons){
+      p.redrawNodes();
+    }
+  }
+
   private int findCur(){
     int i = 0;
     while(polygons.get(i) != curPoly.get() && i < polygons.size()){
@@ -121,9 +140,7 @@ public class Window {
     return i;
   }
 
-  public void paint(Graphics g, Point mousePos, Color c, Point gridNum){
-    currentEntry = c;
-    TmpGridLineNum = gridNum;
+  public void paint(Graphics g, Point mousePos){
     grid.paint(g);
 
     for(SpritePolygon p : polygons){
@@ -139,22 +156,12 @@ public class Window {
     }
   }
 
-  private void buttonClicked(Point mousePos){
-    for (MenuItem b : Buttons) {
-      if (b.contains(mousePos.x, mousePos.y)) {
-        b.action.run();
-        return;
-      }
-    }
-  }
-
   private List<MenuItem> createButtons(){
-    Point pannelStart = new Point(stngs.GRID_SIZE.x+10, 10);
     Buttons = new ArrayList<MenuItem>();
-    Buttons.add(new MenuItem("New Poly",new Point(pannelStart.x, pannelStart.y),new Point(180, 30),
-        () -> newPoly(), Color.lightGray));
+    Buttons.add(new MenuItem("New Poly",new Point(stngs.UI_START.x, stngs.UI_START.y),
+        new Point(180, 30), () -> newPoly(), Color.lightGray));
 
-    pannelStart.y+=40;
+
     final int buttonXSiz = 85;
     final int buttonYSiz = 30;
     String Col[] = {"Black", "D Grey", "Grey", "L Grey", "White", "Red", "Green", "Blue", 
@@ -164,35 +171,33 @@ public class Window {
         int k = j; int m = i;
         Color butColor = getCol(Col[j*2+i]);
         Buttons.add(new MenuItem(Col[j*2+i], 
-            new Point(pannelStart.x+(buttonXSiz + 10)*i, pannelStart.y), 
+            new Point(stngs.UI_START.x+(buttonXSiz + 10)*i, stngs.UI_START.y+(j+1)*40), 
             new Point(buttonXSiz, buttonYSiz), () -> colButtonPushed(Col[k*2+m], butColor), 
             butColor));
       }
-      pannelStart.y += buttonYSiz+10;
     }
 
-    Buttons.add(new MenuItem("SET",new Point(pannelStart.x+125, pannelStart.y),new Point(55, 30),
-        () -> SetCustCol(selectedCol), Color.lightGray));
-    pannelStart.y+=40;
+    Buttons.add(new MenuItem("SET",new Point(stngs.UI_START.x+125, stngs.UI_START.y+9*40),
+        new Point(55, 30), () -> SetCustCol(selectedCol), Color.lightGray));
 
-    Buttons.add(new MenuItem("Reset Poly",new Point(pannelStart.x, pannelStart.y),
+    Buttons.add(new MenuItem("Reset Poly",new Point(stngs.UI_START.x, stngs.UI_START.y+10*40),
         new Point(180, 30), () -> resetPoly(), Color.lightGray));
-    pannelStart.y+=40;
-    Buttons.add(new MenuItem("delete",new Point(pannelStart.x, pannelStart.y),new Point(180, 30),
-        () -> deletePoly(), Color.lightGray));
-    pannelStart.y+=40;
-    Buttons.add(new MenuItem("    <-",new Point(pannelStart.x, pannelStart.y),new Point(85, 30),
-        () -> prevPoly(), Color.lightGray));
-    Buttons.add(new MenuItem("    ->",new Point(pannelStart.x+95, pannelStart.y),new Point(85, 30),
-        () -> nextPoly(), Color.lightGray));
-    pannelStart.y+=40;
 
-    Buttons.add(new MenuItem("Print",new Point(pannelStart.x, pannelStart.y),new Point(180, 30),
-        () -> printer.print(polygons), Color.lightGray));
-    pannelStart.y+=40;
+    Buttons.add(new MenuItem("delete",new Point(stngs.UI_START.x, stngs.UI_START.y+11*40),
+        new Point(180, 30), () -> deletePoly(), Color.lightGray));
 
-    Buttons.add(new MenuItem("SET",new Point(pannelStart.x+95, stngs.WINDOW_SIZE.y-40),
-        new Point(85, 30), () -> grid.setSize(TmpGridLineNum), Color.lightGray));
+    Buttons.add(new MenuItem("    <-",new Point(stngs.UI_START.x, stngs.UI_START.y+12*40),
+        new Point(85, 30), () -> prevPoly(), Color.lightGray));
+
+    Buttons.add(new MenuItem("    ->",new Point(stngs.UI_START.x+95, stngs.UI_START.y+12*40),
+        new Point(85, 30), () -> nextPoly(), Color.lightGray));
+
+    Buttons.add(new MenuItem("Print",new Point(stngs.UI_START.x, stngs.UI_START.y+13*40),
+        new Point(180, 30), () -> printer.print(polygons), Color.lightGray));
+
+    //grid size set
+    Buttons.add(new MenuItem("SET",new Point(stngs.UI_START.x+95, stngs.UI_START.y+14*40),
+        new Point(85, 30), () -> changeGridSize(), Color.lightGray));
 
     return Buttons;
   }

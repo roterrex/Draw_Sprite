@@ -45,47 +45,43 @@ class Main extends JFrame {
 
         private void TextBox(){
             t1 = new TextField("r");
-            t1.setBounds(810,370,37,30);
+            t1.setBounds(stngs.UI_START.x,stngs.UI_START.y+40*9,37,30);
             add(t1);
             t2 = new TextField("g");
-            t2.setBounds(850,370,37,30);
+            t2.setBounds(stngs.UI_START.x+40,stngs.UI_START.y+40*9,37,30);
             add(t2);
             t3 = new TextField("b");
-            t3.setBounds(890,370,37,30);
+            t3.setBounds(stngs.UI_START.x+80,stngs.UI_START.y+40*9,37,30);
             add(t3);
 
-            t4 = new TextField("Grd x");
-            t4.setBounds(810,stngs.WINDOW_SIZE.y-40,37,30);
+            t4 = new TextField("Grid size");
+            t4.setBounds(stngs.UI_START.x,stngs.UI_START.y+40*14,85,30);
             add(t4);
-            t5 = new TextField("Grd y");
-            t5.setBounds(850,stngs.WINDOW_SIZE.y-40,37,30);
-            add(t5);
 
             setLayout(null); 
         }
 
         @Override
         public void paint(Graphics g) {
+            stage.paint(g, getMousePosition());
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
             int ColR = StrgToNum(t1.getText());
             if(ColR >255){ColR = 255;} else if(ColR < 0){ColR = 0;}
             int ColG = StrgToNum(t2.getText());
             if(ColG >255){ColG = 255;} else if(ColG < 0){ColG = 0;}
             int ColB = StrgToNum(t3.getText());
             if(ColB >255){ColB = 255;} else if(ColB < 0){ColB = 0;}
-            
-            Point gridNum = new Point(10, 10);
-            gridNum.x = StrgToNum(t4.getText());
-            if(gridNum.x < 0){gridNum.x = 0;}
-            gridNum.y = StrgToNum(t5.getText());
-            if(gridNum.y < 0){gridNum.y = 0;}
-
             Color custCol = new Color(ColR, ColG, ColB);
-            stage.paint(g, getMousePosition(), custCol, gridNum);
-        }
+            
+            int gridNum = 0;
+            gridNum = StrgToNum(t4.getText());
+            if(gridNum < 0){gridNum = 0;}
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            stage.mouseClicked(e);
+
+            stage.mouseClicked(e, custCol, gridNum);
         }
 
         @Override

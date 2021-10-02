@@ -20,7 +20,7 @@ import java.awt.Point;
 class MenuItem extends Rectangle {
   Runnable action;
   String display;
-  static Font displayFont = new Font("Full Pack 2025", Font.PLAIN, 20);
+  static Font displayFont = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
   Color fill;
 
   /** creates new MenuItem

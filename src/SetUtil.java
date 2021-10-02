@@ -20,7 +20,9 @@ public class SetUtil {
     return unique;
   }
 
-  final Point WINDOW_SIZE = new Point(1000,800);
-  final Point GRID_SIZE = new Point(800,800);
+  final Point WINDOW_SIZE = new Point(1120,920);
+  final Point UI_START = new Point(920,10);
+  final Point GRID_START = new Point(10,10);
+  final Point GRID_SIZE = new Point(900,900);
   
 }
