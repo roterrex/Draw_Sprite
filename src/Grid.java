@@ -10,19 +10,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 public class Grid {
   Point gridLineNum;
-  static final Point defaultGridSize = new Point(10,10);
-  int lineSpaceX;
-  int lineSpaceY;
+  float lineSpaceX;
+  float lineSpaceY;
 
-  SetUtil stngs;
+  private static SetUtil stngs;
 
   private static Grid unique;
 
   private Grid(){
-    gridLineNum = defaultGridSize;
     stngs = SetUtil.getSettings();
-    lineSpaceX = stngs.GRID_SIZE.x /(gridLineNum.x+1);
-    lineSpaceY = stngs.GRID_SIZE.y /(gridLineNum.y+1);
+    setSize(10);
   }
   public static Grid getGrid(){
     if(unique == null){
@@ -31,15 +28,15 @@ public class Grid {
     return unique;
   }
 
-  public void setSize(Point inGridLineNum){
-    gridLineNum = inGridLineNum;
-    lineSpaceX = stngs.GRID_SIZE.x /(gridLineNum.x+1);
-    lineSpaceY = stngs.GRID_SIZE.y /(gridLineNum.y+1);
+  public void setSize(int inGridLineNum){
+    gridLineNum = new Point(inGridLineNum, inGridLineNum);
+    lineSpaceX = (float)stngs.GRID_SIZE.x /(gridLineNum.x+1);
+    lineSpaceY = (float)stngs.GRID_SIZE.y /(gridLineNum.y+1);
   }
 
   public Point getClosestInter(Point p){
-    int rowNum = p.x/lineSpaceX;
-    int colNum = p.y/lineSpaceY;
+    int rowNum = (int)(p.x/lineSpaceX);
+    int colNum = (int)(p.y/lineSpaceY);
 
     if(p.x % lineSpaceX > lineSpaceX/2){rowNum++;}
     if(p.y % lineSpaceY > lineSpaceY/2){colNum++;}
@@ -47,17 +44,27 @@ public class Grid {
     return new Point(rowNum, colNum);
   }
 
-  public void paint(Graphics g){
-    g.setColor(Color.LIGHT_GRAY);
+  public int nodeNumToGridPos(int i, boolean inX){
+    if(inX)
+      return (int)(lineSpaceX*i)+stngs.GRID_START.x; 
+    return (int)(lineSpaceY*i)+stngs.GRID_START.y;
+  }
 
-    for(int i = 1; i <= gridLineNum.x+1; i++){
-      g.drawLine(lineSpaceX*i, 0, lineSpaceX*i, stngs.GRID_SIZE.y);
+  public void paint(Graphics g){
+    g.setColor(Color.white);
+    g.fillRect(stngs.GRID_START.x, stngs.GRID_START.y, stngs.GRID_SIZE.x, stngs.GRID_SIZE.y);
+    
+    g.setColor(Color.LIGHT_GRAY);
+    for(int i = 1; i <= gridLineNum.x; i++){
+      g.drawLine(nodeNumToGridPos(i, true), stngs.GRID_START.y, 
+          nodeNumToGridPos(i, true), stngs.GRID_SIZE.y+stngs.GRID_START.y);
     }
     for(int i = 1; i <= gridLineNum.y; i++){
-      g.drawLine(0, lineSpaceY*i, stngs.GRID_SIZE.x, lineSpaceY*i);
+      g.drawLine(stngs.GRID_START.x, nodeNumToGridPos(i, false), 
+          stngs.GRID_SIZE.x+stngs.GRID_START.x, nodeNumToGridPos(i, false));
     }
 
     g.setColor(Color.black);
-    g.drawLine(stngs.GRID_SIZE.x, 0, stngs.GRID_SIZE.x, stngs.GRID_SIZE.y);
+    g.drawRect(stngs.GRID_START.x, stngs.GRID_START.y, stngs.GRID_SIZE.x, stngs.GRID_SIZE.y);
   }
 }
