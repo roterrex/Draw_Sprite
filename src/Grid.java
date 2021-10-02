@@ -1,6 +1,6 @@
 /**
  * Copyright 2021, Joel Perry, joel.perry@students.com.au
- * last edited: 1/10/21
+ * last edited: 2/10/21
  * 
  * This software is free for use or modification and may be re-released with credit
  */
@@ -30,8 +30,8 @@ public class Grid {
 
   public void setSize(int inGridLineNum){
     gridLineNum = new Point(inGridLineNum, inGridLineNum);
-    lineSpaceX = (float)stngs.GRID_SIZE.x /(gridLineNum.x+1);
-    lineSpaceY = (float)stngs.GRID_SIZE.y /(gridLineNum.y+1);
+    lineSpaceX = (float)stngs.GRID_SIZE.x /(gridLineNum.x);
+    lineSpaceY = (float)stngs.GRID_SIZE.y /(gridLineNum.y);
   }
 
   public Point getClosestInter(Point p){
@@ -55,11 +55,11 @@ public class Grid {
     g.fillRect(stngs.GRID_START.x, stngs.GRID_START.y, stngs.GRID_SIZE.x, stngs.GRID_SIZE.y);
     
     g.setColor(Color.LIGHT_GRAY);
-    for(int i = 1; i <= gridLineNum.x; i++){
+    for(int i = 1; i < gridLineNum.x; i++){
       g.drawLine(nodeNumToGridPos(i, true), stngs.GRID_START.y, 
           nodeNumToGridPos(i, true), stngs.GRID_SIZE.y+stngs.GRID_START.y);
     }
-    for(int i = 1; i <= gridLineNum.y; i++){
+    for(int i = 1; i < gridLineNum.y; i++){
       g.drawLine(stngs.GRID_START.x, nodeNumToGridPos(i, false), 
           stngs.GRID_SIZE.x+stngs.GRID_START.x, nodeNumToGridPos(i, false));
     }

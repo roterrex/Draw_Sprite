@@ -52,14 +52,11 @@ public class Window {
       buttonClicked(mousePos);
     } else {
       if(curPoly.isPresent()){
-        Optional<Node> nodeTmp = curPoly.get().getNodeAt(mousePos);
-        if(e.getButton() == MouseEvent.BUTTON1 && !nodeTmp.isPresent()){
+        if(e.getButton() == MouseEvent.BUTTON1){
           curPoly.get().addNode(mousePos);
         } else if (e.getButton() == MouseEvent.BUTTON3){
           removePointAt(mousePos);
         }
-      } else if (!curPoly.isPresent()){
-        newPoly();
       }
     }
   }
